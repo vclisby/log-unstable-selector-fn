@@ -33,6 +33,7 @@ function occurrences(string, subString, allowOverlapping) {
 
 const SINGLE_LINE_SUSPICIOUS = ['...', '=> [', '??', '||'];
 const MULTI_LINE_SUSPICIOUS = ['let', 'const', '...', '[', ']', '??', '||', '=>'];
+const EXTENSIONS = ['.js', '.jsx', '.ts', '.tsx'];
 
 async function processFile(path) {
     const rl = createInterface({
@@ -91,9 +92,11 @@ async function processFile(path) {
             useSelectorParenthesesCount = [occurrences(line, '(') + open, occurrences(line, ')') + closed];
             useSelectorLines.push(line);
 
-            if (useSelectorSuspicious && useSelectorParenthesesCount[0] === useSelectorParenthesesCount[1]) {
-                console.log(path, ' line ', lineNumber - useSelectorLines.length + 1, ' - ', lineNumber);
-                useSelectorLines.forEach((l) => console.log(l));
+            if (useSelectorParenthesesCount[0] === useSelectorParenthesesCount[1]) {
+                if (useSelectorSuspicious) {
+                    console.log(path, ' line ', lineNumber - useSelectorLines.length + 1, ' - ', lineNumber);
+                    useSelectorLines.forEach((l) => console.log(l));
+                }
 
                 isInUseSelector = false;
                 useSelectorParenthesesCount = [0, 0];
@@ -129,9 +132,13 @@ async function process(directory, isInitial) {
 
     // Process the files in the current directory.
     for (file of files) {
-        const filePath = path.join(directory, file.name);
+        const extension = path.extname(file.name);
 
-        await processFile(filePath);
+        if (EXTENSIONS.includes(extension)) {
+            const filePath = path.join(directory, file.name);
+
+            await processFile(filePath);
+        }
     }
 
     // Recursively process the dirs in the current directory.
