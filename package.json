@@ -1,0 +1,19 @@
+{
+    "name": "log-unstable-selector-fn",
+    "version": "1.0.0",
+    "description": "Static code analysis script that identifies and logs unstable selector functions",
+    "main": "main.js",
+    "scripts": {
+        "start": "node main.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/vclisby/log-unstable-selector-fn.git"
+    },
+    "author": "vclisby",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/vclisby/log-unstable-selector-fn/issues"
+    },
+    "homepage": "https://github.com/vclisby/log-unstable-selector-fn#readme"
+}
