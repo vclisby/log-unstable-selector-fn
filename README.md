@@ -18,6 +18,11 @@ For codebases that existed well before v8.1.0, they will have many usages of `us
 
 This is a simple static code analysis script. It will analyse all files (of given extensions) in the directory (and sub directories) of which it is placed. It will find all usages of `useSelector()` and will try to determine whether the selector function passed into it returns a stable value or not. If it is identified to be stable, nothing will be logged to the console. If it is unstable, an error will be logged to the console. If the script is unsure, a warning will be logged to the console and the developer can analyse it further.
 
+## Usage
+
+1. Clone this repository
+2. `npm start --path C:\Users\Fred\Projects\my-project-that-has-bad-selector-usages`
+
 ## Examples
 
 A good usage of `useSelector()` with a stable selector function:

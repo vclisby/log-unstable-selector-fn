@@ -1,35 +1,8 @@
-const path = require('path');
-const { readdir } = require('fs').promises;
-const { createReadStream } = require('fs');
-const { createInterface } = require('readline');
-
-/** Function that count occurrences of a substring in a string;
- * @param {String} string               The string
- * @param {String} subString            The sub string to search for
- * @param {Boolean} [allowOverlapping]  Optional. (Default:false)
- *
- * @author Vitim.us https://gist.github.com/victornpb/7736865
- * @see Unit Test https://jsfiddle.net/Victornpb/5axuh96u/
- * @see https://stackoverflow.com/a/7924240/938822
- */
-function occurrences(string, subString, allowOverlapping) {
-    string += '';
-    subString += '';
-    if (subString.length <= 0) return string.length + 1;
-
-    var n = 0,
-        pos = 0,
-        step = allowOverlapping ? 1 : subString.length;
-
-    while (true) {
-        pos = string.indexOf(subString, pos);
-        if (pos >= 0) {
-            ++n;
-            pos += step;
-        } else break;
-    }
-    return n;
-}
+import path from 'path';
+import { readdir } from 'fs/promises';
+import { createReadStream } from 'fs';
+import { createInterface } from 'readline';
+import { occurrences } from './utilities.js';
 
 const SINGLE_LINE_SUSPICIOUS = ['...', '=> [', '??', '||'];
 const MULTI_LINE_SUSPICIOUS = ['let', 'const', '...', '[', ']', '??', '||', '=>'];
@@ -111,13 +84,13 @@ async function processFile(path) {
     }
 }
 
-async function process(directory, isInitial) {
+async function processDirectory(directory, isInitial) {
     const allEntries = await readdir(directory, { withFileTypes: true }, (err, files) => {
         throw err;
     });
 
     // If we are calling this for the first time, we want to filter this script file out of the process.
-    const filteredEntries = isInitial ? allEntries.filter((e) => e.name !== path.basename(__filename)) : allEntries;
+    const filteredEntries = allEntries; // isInitial ? allEntries.filter((e) => e.name !== path.basename(__filename)) : allEntries;
 
     const { dirs, files } = filteredEntries.reduce(
         (acc, curr) => {
@@ -131,7 +104,8 @@ async function process(directory, isInitial) {
     );
 
     // Process the files in the current directory.
-    for (file of files) {
+    for (const file of files) {
+        console.log(file);
         const extension = path.extname(file.name);
 
         if (EXTENSIONS.includes(extension)) {
@@ -153,4 +127,6 @@ async function process(directory, isInitial) {
     }
 }
 
-process(__dirname, true);
+const dir = process.argv.some((arg) => arg === '--test') ? './tests' : '';
+
+processDirectory(dir, true);

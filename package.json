@@ -4,12 +4,14 @@
     "description": "Static code analysis script that identifies and logs unstable selector functions",
     "main": "main.js",
     "scripts": {
-        "start": "node main.js"
+        "start": "node src/main.js",
+        "test": "node src/main.js --test"
     },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/vclisby/log-unstable-selector-fn.git"
     },
     "author": "vclisby",
-    "license": "MIT"
+    "license": "MIT",
+    "type": "module"
 }
